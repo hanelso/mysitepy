@@ -26,6 +26,7 @@ urlpatterns = [
     path('user/join', user_views.join),
     path('user/joinsuccess', user_views.joinsuccess),
     path('user/modifyform',user_views.modifyform),
+    path('user/modify', user_views.modify),
 
     path('user/checkemail', user_views.checkemail),
 

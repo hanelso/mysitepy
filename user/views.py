@@ -9,14 +9,28 @@ def modifyform(request):
     authuser = request.session['authuser']
     data = {'user' : authuser}
     return render(request, 'user/modifyform.html', data)
-    pass
+
+def modify(request):
+
+    authuser = request.session['authuser']
+    print(authuser)
+    user = User.objects.get(id=authuser['id'])
+
+    user.password = request.POST['password']
+    user.save()
+
+    results = User.objects.filter(id=authuser['id'])
+    authuser = results[0]
+    request.session['authuser'] = model_to_dict(authuser)
+
+    return HttpResponseRedirect('/')
+
 
 def checkemail(request):
     # /user/checkemail?email=kickscar@gmail.com
     results = User.objects.filter(email=request.GET['email'])
+    result = { 'result' : len(results) == 0 }
 
-    # len(results)가 True : not exist(사용가능)
-    result = { 'result' : len(results) == 0}
     return JsonResponse(result)
 
 def joinform(request):
