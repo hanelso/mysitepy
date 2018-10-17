@@ -16,6 +16,8 @@ def modify(request):
     print(authuser)
     user = User.objects.get(id=authuser['id'])
 
+    data = {'user' : authuser}
+
     user.password = request.POST['password']
     user.save()
 
@@ -23,7 +25,9 @@ def modify(request):
     authuser = results[0]
     request.session['authuser'] = model_to_dict(authuser)
 
-    return HttpResponseRedirect('/')
+
+
+    return render(request, 'user/modifyform.html', data)
 
 
 def checkemail(request):

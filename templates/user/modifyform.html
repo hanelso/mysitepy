@@ -2,6 +2,7 @@
 
 {% block css_link %}
 	<link href="/assets/css/user.css" rel="stylesheet" type="text/css">
+
 {% endblock %}
 
 {% block content %}
@@ -14,14 +15,28 @@
 					<h4>{{ user.email }}</h4>
 
 					<label class="block-label">패스워드</label>
-					<input name="password" type="password" value="">
+					<input id="password" name="password" type="password" value="{{ request.session.authuser.password }}">
 
 					<fieldset>
 						<legend>성별</legend>
 						<h4>{{ user.gender }}</h4>
 					</fieldset>
 
-					<input type="submit" value="수정하기">
+					<input id="authuser_password" type="hidden" value="{{ request.session.authuser.password }}">
+					{% if user.password == request.session.authuser.password %}
+					<input id="btn-submit" type="submit" value="수정하기">
+					<script type="/text/javascript">
+						if ($('#password').val() == $('#authuser_password').val()){
+							alert('동일한 비밀번호 입니다.');
+						}
+						else {
+							alert('수정되었습니다.');
+						}
+						<!-- 아직... 전부 완료되지 않았다. -->
+					</script>
+					{% else %}
+					<h4>수정되었습니다!</h4>
+					{% endif %}
 				</form>
 		</div>
 {% endblock %}
