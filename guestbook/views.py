@@ -1,11 +1,13 @@
 from datetime import datetime
 
+from django.forms import model_to_dict
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
 from guestbook import models
 from guestbook.models import Guestbook
+from user.models import User
 
 
 def index(request):
@@ -18,10 +20,17 @@ def index(request):
 def deleteform(request):
     id = request.GET['id']
     data = {"id":id}
+    result = Guestbook.objects.filter(id=id)
+    dict_data = model_to_dict(result[0])
+    if dict_data['password'] == '' :
+        Guestbook.objects.filter(id=id).filter(password=dict_data['password']).delete()
+        return HttpResponseRedirect("/guestbook")
+
     return render(request, 'guestbook/deleteform.html', data)
 
 
 def add(request):
+
     guestbook = Guestbook()
 
     guestbook.name = request.POST['name']
