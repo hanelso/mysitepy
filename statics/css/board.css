@@ -45,6 +45,10 @@ input#kwd	{
 	text-align:center;
 }
 
+#title_arrow    {
+    text-align:left;
+}
+
 .tbl-ex th	{
 	border-top:2px solid #333;
 	border-bottom:2px solid #333;
@@ -128,7 +132,7 @@ a.del	{
 	display:block;
 	width:20px;
 	height:20px;
-	background:url("/mysitepy/assets/images/recycle.png") no-repeat 0 0;
+	background:url("/assets/images/recycle.png") no-repeat 0 0;
 	font-size:0;
 }
 

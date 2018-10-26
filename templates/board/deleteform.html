@@ -1,0 +1,19 @@
+{% extends '../base.html' %}
+
+{% block css_link %}
+	<link href="/assets/css/board.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<form method="post" action="/board/delete">{% csrf_token %}
+		<input type='hidden' name="id" value="{{ board.id }}">
+		<table>
+			<tr>
+				<td>비밀번호</td>
+				<td><input type="password" name="password"></td>
+				<td><input type="submit" value="확인"></td>
+			</tr>
+		</table>
+	</form>
+	<a href="/board?page={{ request.session.session_page }}">게시판으로 돌아가기</a>
+{% endblock %}

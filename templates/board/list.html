@@ -1,0 +1,102 @@
+{% extends '../base.html' %}
+
+{% block css_link %}
+<link href="/assets/css/board.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block content %}
+			<div id="board">
+
+				<form id="search_form" action="/board/search" method="post">{% csrf_token %}
+					<select name="select">
+						<option value="title">제목</option>
+						<option value="value">글쓴이</option>
+					</select>
+					<input type="text" id="kwd" name="search" value="">
+					<input type="submit" value="찾기">
+				</form>
+				<table class="tbl-ex">
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>글쓴이</th>
+						<th>조회수</th>
+						<th>작성일</th>
+						<th>수정일</th>
+						<th></th>
+					</tr>
+					{% for board in boards_list %}
+					<tr>
+
+						<td>
+							<script>
+								count_from_django = {{ count }}
+								cur_from_django = {{ page.cur }} -1
+								count =count_from_django - (cur_from_django)*5 -{{ forloop.counter0 }}
+								document.write(count)
+							</script>
+						</td>
+
+						<td id = "title_arrow">
+							{% if board.depth != 0 %}
+							<script type="text/javascript" >
+							o_no = {{ board.o_no }}
+							depth = {{ board.depth }}
+							for(var i = 0; i < depth; i++)
+							{
+								document.write('&nbsp;&nbsp;')
+							}
+							</script>
+							<img src="/assets/images/arrow.png" class="arrow">
+							{% endif %}
+							<a href="/board/view?id={{ board.id }}">{{ board.title }}</a></td>
+						<td>{{ board.user_id.name }}</td>
+						<td>{{ board.hit }}</td>
+						<td>{{ board.reg_date|date:"Y.m.d"  }}</td>
+						<td>{{ board.modify_date |date:"Y.m.d" }}</td>
+						<td>
+							{% if request.session.authuser.id == board.user_id.id %}
+								<a href="/board/deleteform?id={{ board.id }}" class="del">삭제</a>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+				<div class="pager">
+					<ul>
+						{% if page.start_cur != 1 %}
+							<li><a href="/board?page=1 ">◀◀</a></li>
+							<li><a href="/board?page={{ page.previous }} ">◀</a></li>
+						{% else %}
+							<li></li>
+							<li></li>
+						{% endif %}
+						{% for p in page.list %}
+							{% if p == page.cur %}
+								<li class="selected">{{ page.cur }}</li>
+							{% else %}
+								{% if request.session.search == 1 %}
+								<li><a href="/board?page={{ p }}&select={{search.select}}&text={{search.text}}">{{ p }}</a></li>
+								{% else %}
+								<li><a href="/board?page={{ p }}">{{ p }}</a></li>
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+						{% if page.end >= page.end_cur %}
+							<li><a href="/board?page={{ page.next }}">▶</a></li>
+							<li><a href="/board?page={{ page.end }}">▶▶</a></li>
+						{% else %}
+							<li></li>
+							<li></li>
+						{% endif %}
+
+					</ul>
+				</div>
+				{% if request.session.authuser is not None %}
+				<div class="bottom">
+					<a href="/board/writeform?id={{ request.session.authuser.id }}" id="new-book">글쓰기</a>
+				</div>
+				{% endif %}
+			</div>
+{% endblock %}

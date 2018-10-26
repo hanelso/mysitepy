@@ -93,6 +93,7 @@ def login(request):
     # 로그인 성공(처리)
     authuser = results[0]
     request.session['authuser'] = model_to_dict(authuser)
+
     print(model_to_dict(authuser), type(model_to_dict))
     # 현재 코드만 써주게 되면 쿠키를 메모리에 저장 -> 그래서 브라우저를 껐다 켜면 로그아웃됨
     #  -> settings 제일 밑에 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 추가 해주면 ->
@@ -108,5 +109,6 @@ def login(request):
 
 def logout(request):
     del request.session['authuser']
+
 
     return HttpResponseRedirect('/')
